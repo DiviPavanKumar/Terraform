@@ -1,0 +1,260 @@
+Infrastructure:
+-> Servers
+-> route53
+-> security groups
+-> IAM
+-> users
+-> loadbalancees
+-> darabases
+-> VPC
+-> Popular infrastructure as a code is Terraform
+
+Configuration:
+-> what is there inside the server
+-> Configuration management nothing but configuration as a code
+-> popular configuration management tool is Ansible
+
+Terraform is one of the most popular Iac(nfrastructure as a code)
+
+Terraform can help you manage in a cloud infrastructure setup:
+
+1. Compute Resources:
+-> Servers (EC2, Compute Engine, etc.)
+-> Auto-scaling Groups
+-> Instances with specific configurations (e.g., AMI, instance type, etc.)
+
+2. Networking:
+-> VPC (Virtual Private Cloud)
+-> Subnets (Public, Private)
+-> Route53 (DNS management)
+-> Internet Gateways, NAT Gateways
+-> Virtual Private Gateways (VPN)
+
+3. Security & Identity Management:
+-> Security Group
+-> IAM (Identity and Access Management)
+-> Roles, Policies, and Permissions
+-> Service accounts, and Access management
+-> Users and Groups
+-> Managing user access with policies
+-> Key Pairs (for EC2 instances)
+
+4. Load Balancers & Auto Scaling:
+-> Elastic Load Balancers (ELB)
+-> Application Load Balancers (ALB)
+-> Network Load Balancers (NLB)
+-> Target Groups and Listeners
+
+5. Databases:
+-> RDS (Relational Database Service)
+-> DynamoDB (NoSQL)
+-> Aurora
+-> Elasticache (Redis, Memcached)
+
+6. Storage:
+-> S3 Buckets
+-> EBS Volumes
+-> EFS (Elastic File System)
+-> Glacier Storage
+
+7. Monitoring & Logging:
+-> CloudWatch (Metrics, Alarms, Logs)
+-> CloudTrail (Audit Logs)
+-> AWS Config (Compliance and Change Tracking)
+
+8. Serverless Resources:
+-> Lambda Functions
+-> API Gateway
+-> Step Functions
+-> SNS (Simple Notification Service)
+-> SQS (Simple Queue Service)
+
+9. Containerization:
+-> ECS (Elastic Container Service)
+-> EKS (Elastic Kubernetes Service)
+-> Fargate
+-> Docker Containers & Tasks
+
+10. CI/CD Pipeline Resources:
+-> CodePipeline
+-> CodeBuild
+-> CodeDeploy
+
+11. Infrastructure as Code:
+-> Terraform Modules
+-> Reusable infrastructure code for different services
+-> State Management
+-> Backend state storage (e.g., S3, Terraform Cloud)
+
+12. Other Cloud Providers:
+-> Azure, GCP (Terraform supports multi-cloud infrastructures)
+-> Google Cloud Resources (GKE, Compute Engine, Cloud Functions)
+-> Azure Resources (VMs, App Services, SQL Database)
+
+13. Miscellaneous Resources:
+-> Secrets Management (e.g., Secrets Manager, KMS)
+-> CloudFront (CDN)
+-> API Gateway
+
+Terraform is extremely versatile for automating and provisioning infrastructure. You can also leverage modules, workspaces, and other features to make your infrastructure code more modular and maintainable.
+
+Terraform Advantages:
+
+-> Version Control:
+	Terraform is code, and like any code, it should be kept in version control (e.g., Git). This allows you to track changes over time and easily revert to previous versions if something goes wrong. It's like having a "history" of your infrastructure.
+-> Consistent Infrastructure:
+    With Terraform, the same code can be used across multiple environments like DEV, QA, UAT, and PROD. This ensures that all environments are set up the same way, minimizing configuration drift and reducing the chances of errors due to different setups.
+-> CRUD Operations (Create, Read, Update, Delete):
+    Terraform allows you to easily manage infrastructure by enabling you to create, read, update, and delete resources. It's like having a complete toolkit to interact with your infrastructure.
+-> Inventory Management:
+    By looking at your Terraform code, you can see exactly what resources and services are being used for a specific project. It gives you a clear view of your infrastructure setup at any time, like an inventory list of what’s deployed.
+-> Cost Optimization:
+    You can create infrastructure only when you need it and delete it when you no longer do. This helps you save costs by not keeping unused resources running, which is especially useful for cloud services.
+-> Dependency Management:
+    Terraform automatically handles dependencies between resources. It knows which resources need to be created or updated first before others, ensuring that your infrastructure is built in the correct order.
+-> Modules (Code Reusability):
+    Terraform lets you organize and reuse parts of your code as "modules." These modules act like building blocks that can be used in different parts of your infrastructure, making your code cleaner, more maintainable, and easier to manage.
+-> Declarative Language:
+    Terraform uses a declarative language.
+
+In short, Terraform allows you to automate and manage your infrastructure in a consistent, efficient, and cost-effective way by using code that is easy to version, reuse, and maintain.
+
+Terraform Environment setup:
+-> IDE (Integrated Development Environment): Install VScode
+-> Download Terraform(Extract and keep terraform.exe file in folder. Open "system environment variables" then select path, then select edit. then select new. Add the path of terrafor,.exe then save it.)
+	Open cmd/gitbash, type terraform. It will show you terraform commands. means it has setup correctly. otherwise double click on terraform.exe then check in cmd again.
+-> Install AWS CLI(command Line Interface)
+-> Create a user in AWS Console-IAM with Adminstrator access. Then create access key under security credentials.
+-> configure AWS in cmd with 'Access code and Secrete key' which you got after creating access key for a user.
+		$aws configure
+			Enter Access code:
+			Enter Secrete Key:
+			Default Region Name:
+
+Terraform is "Hybrid IaC" because it allows you to define and manage infrastructure across various technologies Like AWS, AZURE, GCP, GIT...etc
+So then we need to spicify what provider we are using by writing a code file in VScode.
+Example: if we are using AWS infra:
+			#Create a file name with provider.tf the enter below code:
+				terraform {
+				  required_providers {
+				    aws = {
+					  source = "hashicorp/aws"
+                      version = "5.93.0"
+                    }
+                  }
+                }
+
+                provider "aws" {
+                # Configuration options
+				
+                }
+* we should not give aws access key and secret code in code. it will be security problem and git wont take files to repo. we can check those details under .aws folder
+
+Terraform commands:
+-> $terraform init: Initializes Terraform and downloads necessary provider plugins.
+-> $terraform plan: Shows what resources will be created, modified, or deleted.
+-> $terraform apply: Applies the changes and creates or updates the resources.
+-> $terraform destroy: Destroys all the resources created by Terraform.
+
+First time when you execute terraform init, terraform plan, Providers file will generate under .terraform file with huge data. So we need create a file i.e .gitignore to ignore those files into git repo.
+
+Creation of resources:
+-> Provider: we need to tell terraform which provider we are using. is it AWS, AZURE or GCP..
+-> Create EC2.tf Resources
+ 
+-> tags: very important. simple but powerfull. Mostly for filtering and cost optimaization we use tags in AWS.
+		tags is always key-value pair.
+		Ex: Name=some-name
+			Environment=DEV/QA/PROD
+			Terraform=true
+			Component=MongoDB
+			Project=Roboshop
+		Every resource in Terraform have tags.
+
+Done the below topis:
+*Creation of resources like Provider, EC2, Security Group, outputs, route53 and tags
+*Variables, Conditions, Loops (count and index), For Loop(for each), Dynamic Loop(Dynamic Block) and Functions.
+
+-> Locals:
+	Locals is also a type of variables, but it can have extra capabilities like expressions and functions. 
+	Locals are like veriables which can have key-value pairs and it has some extra capalities of having functions and expressions and take the output into a variable.
+-> Data Sources:
+	AMI IDs will get change when its get update and also its different for different environment.
+	Data Source: We can query the data dynamically from source(AWS).
+				Data Sources are useful to query the data/information from provider.
+-> Dynamic Block: It is used to repeate the configuration inside the resource defination just like loop & for loop used to repeate entire resource, but Dynamic 	block  is 	used to repeate the particular configuration(nested) inside the resouce defination.
+----------------------------------------------------------------------------------
+State and Remote State:(Very Important):
+
+Terraform uses a state file to keep track of the existing infrastructure and compare it with the declared configuration in your .tf files. This helps Terraform understand what needs to be created, updated, or deleted. 
+Storing the state file locally or in your code repository can lead to serious issues like duplicate resources, errors during creation (e.g., “resource already exists”), and accidental changes, especially when working in a team. To avoid these problems and support safe collaboration, it's best practice to store the state file in a remote backend like Amazon S3 and use DynamoDB for state locking, which prevents multiple people from applying changes at the same time.
+
+Sate: Terraform is a declarative scripting. Terraform responsibility is to crete resources declared in .tf files, terraform will create 'terraform.tfstate' file to 
+      understand the resouces it created. so all the time terraform tries to match .tf files with state file.
+	  
+*terraform.tfstate
+*terraform.tfstate.backup
+*terraform.state.lockfile - It will showing when terraform is doing updates at background.
+
+Remote State: 
+S3 Bucket: we keep state file here and lock with dynamoDB.
+
+State is nothing but terraform has to compare the declared configuration vs the existing configuration, so that terraform create a state file for comparision. 
+But if you keep your state files in your local or in your repos there is problem of duplicates or errors(Duplicate resources or error while creating resources saying already exist or accidental Changes). so we have keep state files inside remote location(S3 Buckets then lock file with DynamoDB) then it will be very useful for the collaboration purpose.
+----------------------------------------------------------------------------
+-> tfvars:
+	* to replace default values in variables or if values are not specified in 'variables.tf' we can supply from here.
+	* It is used to create multi ENV infra, we can control through different variable values and different state.
+		syntax: -var/file=Dev/dev.tfvars
+			-var/file=PROD.prod.tfvars
+	
+	A .tfvars file is used in Terraform to assign values to input variables defined in your configuration (.tf files). It helps separate configuration data from code, making your setup cleaner and easier to manage across different environments like dev, staging, or prod.
+
+	Ansible: Config code is same, but how can we use same code to configure multi Env hosts and different variables.
+	Iaac: Consistency across multi Env, we can use same code but different variables.
+	
+	1. variable.tf -> we can keep default values here, it is not mandatory to keep default values. But we should declare variables.
+	2. terraform.tfvars -> to override default values inside variables or else no need to keep default values inside. we can directly provide from tfvars file.
+
+-----------------------------------------------------------------------------
+Multi-Environment:
+1. Maintain different repos	(For Large sectors and banking)
+	*roboshop-DEV
+	*roboshop-PROD
+   Pros: code is completly different, so that we dnt mess with Dev and Prod.
+   Cons: we need to work on multiple repos, code is duplicated in 2 repos.
+   
+2. Same code, but different variables and configuration (for small sectors/infra)
+	Pros: code is reused
+	Cons: we should be very careful while changing, same code is reflecting to PROD also.
+	
+3. Terraform workspaces.
+-------------------------------------------------------------------------------------------
+-> Modules: (Very Important)
+	*Its like Roles in Ansible.
+	*Modules in Terraform are like reusable building blocks of your infrastructure code. A module is just a collection of .tf files grouped together to manage a specific part of your setup — like creating EC2 instances, setting up VPCs, or deploying a database.
+	*DRY-> Keep the code centralized, we can refer the same code as many times as we want.
+	*Modules help centralize the code and allow us to reuse the same logic multiple times for different tasks or environments.
+------------------------------------------------------------------------------------------------
+VPC: (Virtual Private Cloud)
+	It is AWS Virtual private cloud isolated from other projects. all project resources can be provisioned and we have full control.
+	A VPC is your own private network within AWS. It allows you to define IP ranges, create subnets, and control network access.
+	
+Subnets:
+	Subnets are segments within a VPC used to group resources. They can be public (internet-facing) or private (internal-only).
+
+Internet Gateway (IGW):
+	An Internet Gateway is a component that enables communication between your VPC and the internet. It must be attached to the VPC and referenced in route tables.
+
+Route Tables:
+	Route tables contain rules that control how traffic moves within the VPC and to external networks. Each subnet is associated with a route table.
+	
+	
+
+
+	
+	
+	
+	
+	
+			
